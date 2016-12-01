@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Schibsted technical challenge</title>
+	<link rel="stylesheet" href="css/bulma.css">
+	<link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+	<section class="section">
+		<div class="container">
+			<h1 class="title is-2">Schibsted technical challenge</h1>
+			<noscript>You need to enable JavaScript to view this page.</noscript>
+
+			<div id="vue-app" class="hide-no-js">
+				<!-- list filters -->
+				<div class="box">
+					<form action="">
+						<div class="columns">
+							<div class="column is-one-quarter-desktop is-half-tablet">
+								<label class="label" for="keyword-search">Search description</label>
+								<p class="control"><input class="input" type="text" v-model="searchString" id="keyword-search" placeholder="Keyword search"></p>
+							</div>
+
+							<div class="column is-one-quarter-desktop is-half-tablet">
+								<label for="max-results" class="label">Maximum results to display</label>
+								<p class="control">
+									<span class="select is-fullwidth">
+										<select v-model="results">
+											<option v-bind:value="10">10</option>
+											<option v-bind:value="25">25</option>
+											<option v-bind:value="50">50</option>
+										</select>
+									</span>
+								</p>
+							</div>
+						</div>
+
+						<div class="columns">
+							<div class="column is-half">
+								<p class="control">
+									<label class="checkbox">
+										<input type="checkbox" v-model="filerLikes">
+										Only show videos from users with more than 10 likes
+									</label>
+								</p>
+							</div>
+						</div>
+						
+						<p>Displaying up to {{ results }} results.</p>
+						
+					</form>
+				</div>
+
+				<!-- list results -->
+				<ul>
+					<li v-for="video in filteredVideos" class="columns">
+						<div class="column is-2">
+							<a v-bind:href="video.user.link">
+								<span v-if="video.user.pictures">
+									<img v-bind:src="video.user.pictures.sizes[3].link" alt="">
+								</span>
+								<span v-else>
+									<img src="http://placehold.it/300x300?text=No+image" alt="">
+								</span>
+							</a>
+						</div>
+						<div class="column content">
+							<h2><a v-bind:href="video.link">{{ video.name }}</a></h2>
+							<template v-for="line in video.description.split('\n')"><p>{{ line }}</p></template>
+							<hr />
+							<div class="level">
+							  <div class="level-item">
+							    <p class="heading">Plays</p>
+							    <p class="title">{{ video.stats.plays }}</p>
+							  </div>
+							  <div class="level-item">
+							    <p class="heading">Likes</p>
+							    <p class="title">{{ video.metadata.connections.likes.total }}</p>
+							  </div>
+							  <div class="level-item">
+							    <p class="heading">Comments</p>
+							    <p class="title">{{ video.metadata.connections.comments.total }}</p>
+							  </div>
+							</div>
+							<hr />
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<script src="js/vue.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
